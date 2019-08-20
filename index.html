@@ -5,16 +5,30 @@
     <title>To do application</title>
   </head>
   <body>
-
+    <div id="todo"></div>
     <script type="module">
       import Task from './src/task.js';
+      import Bucket from './src/bucket.js';
 
-      let task = new Task({
+      let todoApp = document.getElementById('todo');
+
+      let task1 = new Task({
         title: 'Bug Fix 8231',
         description: 'This bug is breaking everything!'
       });
 
-      console.log(task.get())
+      let task2 = new Task({
+        title: 'This is sort of dope!',
+        description: 'Testing'
+      });
+      
+      let bucket = new Bucket({
+        title: 'Doing...'
+      });
+
+      bucket.addTask(task1);
+      bucket.addTask(task2);
+      bucket.addTask(task1);
     </script>
   </body>
 </html>
