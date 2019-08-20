@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>To do application</title>
+  </head>
+  <body>
+
+    <script type="module">
+      import Task from './src/task.js';
+
+      let task = new Task({
+        title: 'Bug Fix 8231',
+        description: 'This bug is breaking everything!'
+      });
+
+      console.log(task.get())
+    </script>
+  </body>
+</html>
