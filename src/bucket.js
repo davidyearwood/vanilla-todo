@@ -15,15 +15,30 @@ export default class Bucket {
   addTask(task) {
     let { tasks, element } = this;
     let found = tasks.find(t => t.id === task.id);
-
+    console.log(this.tasks);
     if (found !== undefined) {
-      return tasks;
+      return this.tasks;
     }
 
     element.appendChild(task.get());
-    this.tasks.push(task);
+    tasks.push(task);
 
     return tasks;
+  }
+
+  createTask() {}
+
+  removeTask(id) {
+    let found = this.tasks.find(task => task.id === id);
+
+    if (found === undefined) {
+      return null;
+    }
+
+    this.element.removeChild(found.element);
+    this.tasks = this.tasks.filter(task => task.id !== id);
+
+    return found;
   }
 
   handleClick(e) {
