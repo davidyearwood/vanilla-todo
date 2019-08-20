@@ -15,7 +15,6 @@ export default class Bucket {
   addTask(task) {
     let { tasks, element } = this;
     let found = tasks.find(t => t.id === task.id);
-    console.log(this.tasks);
     if (found !== undefined) {
       return this.tasks;
     }
