@@ -15,11 +15,16 @@ export default function taskView(props) {
     {
       class: 'task',
       id: `task-${id}`,
-      'data-id': id
+      'data-id': id,
+      'data-type': 'task'
     },
     [
-      createElement('h1', { class: 'task__title' }, title),
-      createElement('p', { class: 'task__description' }, description)
+      createElement('h1', { class: 'task__title', 'data-for': id }, title),
+      createElement(
+        'p',
+        { class: 'task__description', 'data-for': id },
+        description
+      )
     ]
   );
 }

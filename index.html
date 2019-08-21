@@ -22,6 +22,11 @@
         description: 'Testing'
       });
       
+      let task3 = new Task({
+        title: "This is a newer task",
+        description: ''
+      });
+
       let bucket = new Bucket({
         title: 'Doing...'
       });
@@ -29,8 +34,9 @@
       bucket.addTask(task1);
       bucket.addTask(task2);
       bucket.addTask(task1);
-
-      todoApp.appendChild(bucket.element);
+      bucket.addTask(task3);
+      
+      todoApp.appendChild(bucket.element.get());
     </script>
   </body>
 </html>

@@ -1,5 +1,5 @@
 import ID from './utils/ID.js';
-import taskView from './views/taskView.js';
+import taskView from './views/taskViewFactory.js';
 
 export default class Task {
   constructor(config) {
@@ -11,7 +11,27 @@ export default class Task {
     });
   }
 
+  getForm() {
+    return this.element.getForm();
+  }
+
   get() {
-    return this.element;
+    return this.element.get();
+  }
+
+  getId() {
+    return this.id;
+  }
+
+  edit(props) {
+    let newTask = taskView(
+      Object.assign({}, props, {
+        id: this.id
+      })
+    );
+
+    this.element = newTask;
+
+    return this.get;
   }
 }

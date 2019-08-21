@@ -1,5 +1,5 @@
 import ID from './utils/ID.js';
-import bucketView from './views/bucketView.js';
+import bucketView from './views/bucketFactoryView.js';
 
 export default class Bucket {
   constructor(config) {
@@ -8,39 +8,39 @@ export default class Bucket {
       title: config.title,
       id: this.id
     });
-    this.tasks = [];
-    this.element.addEventListener('click', this.handleClick.bind(this));
+
+    this.tasks = new Map();
+    this.element.get().addEventListener('click', this.handleClick.bind(this));
   }
 
   addTask(task) {
-    let { tasks, element } = this;
-    let found = tasks.find(t => t.id === task.id);
-    if (found !== undefined) {
+    let { tasks } = this;
+    if (tasks.has(task.id)) {
       return this.tasks;
     }
 
-    element.appendChild(task.get());
-    tasks.push(task);
+    this.element.get().appendChild(task.get());
+
+    tasks.set(task.id, task);
 
     return tasks;
   }
 
-  createTask() {}
-
   removeTask(id) {
-    let found = this.tasks.find(task => task.id === id);
+    let task = tasks.get(id);
+    let isDeleted = tasks.delete(id);
 
-    if (found === undefined) {
-      return null;
+    if (isDeleted) {
+      this.element.removeChild(task.get());
     }
 
-    this.element.removeChild(found.element);
-    this.tasks = this.tasks.filter(task => task.id !== id);
-
-    return found;
+    return isDeleted;
   }
 
+  taskToForm(id) {}
+
   handleClick(e) {
-    console.log(this.element);
+    console.log(this);
+    console.log(e.target);
   }
 }

@@ -14,7 +14,8 @@ export default function bucketView(props) {
     {
       class: 'bucket',
       id: `bucket-${id}`,
-      'data-id': id
+      'data-id': id,
+      'data-type': 'bucket'
     },
     [createElement('h1', { class: 'bucket__title' }, title)]
   );
