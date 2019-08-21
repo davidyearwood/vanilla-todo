@@ -16,7 +16,8 @@ export default function taskView(props) {
       class: 'task',
       id: `task-${id}`,
       'data-id': id,
-      'data-type': 'task'
+      'data-type': 'task',
+      draggable: true
     },
     [
       createElement('h1', { class: 'task__title', 'data-for': id }, title),

@@ -4,11 +4,8 @@ import taskView from './views/taskViewFactory.js';
 export default class Task {
   constructor(config) {
     this.id = ID();
-    this.element = taskView({
-      id: this.id,
-      title: config.title,
-      description: config.description
-    });
+    this.props = Object.assign({}, config, { id: this.id });
+    this.element = taskView(this.props);
   }
 
   getForm() {
@@ -24,11 +21,8 @@ export default class Task {
   }
 
   edit(props) {
-    let newTask = taskView(
-      Object.assign({}, props, {
-        id: this.id
-      })
-    );
+    this.props = Object.assign(this.props, props, { id: this.id });
+    let newTask = taskView(this.props);
 
     this.element = newTask;
 
