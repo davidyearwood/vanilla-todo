@@ -145,10 +145,8 @@ export function TaskCreateFormComponent(props) {
   return form;
 }
 
-export default function TaskComponentCreator() {
-  return {
-    content: TaskComponent,
-    editForm: TaskEditFormComponent,
-    createForm: TaskCreateFormComponent
-  }
-}
+export default {
+  content: TaskComponent,
+  editForm: TaskEditFormComponent,
+  createForm: TaskCreateFormComponent
+};

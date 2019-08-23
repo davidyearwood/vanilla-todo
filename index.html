@@ -15,39 +15,30 @@
   <body>
     <div id="todo"></div>
     <script type="module">
-      import Task from './src/task.js';
       import Bucket from './src/bucket.js';
-      import EditForm from './src/views/taskEditFormView.js';
 
       let todoApp = document.getElementById('todo');
-
-      let task1 = new Task({
-        title: 'Bug Fix 8231',
-        description: 'This bug is breaking everything!',
-        form: EditForm
-      });
-
-      let task2 = new Task({
-        title: 'This is sort of dope!',
-        description: 'Testing',
-        form: EditForm
-      });
-      
-      let task3 = new Task({
-        title: "This is a newer task",
-        description: ''
-      });
 
       let bucket = new Bucket({
         title: 'Doing...'
       });
 
-      bucket.addTask(task1);
-      bucket.addTask(task2);
-      bucket.addTask(task1);
-      bucket.addTask(task3);
+      bucket.addTaskToDom({
+        title: 'Bug Fix 8231',
+        description: 'This bug is breaking everything!',
+      });
 
-      todoApp.appendChild(bucket.element.get());
+      bucket.addTaskToDom({
+        title: 'This is sort of dope!',
+        description: 'Testing',
+      });
+
+      bucket.addTaskToDom({
+        title: "This is a newer task",
+        description: ''
+      });
+
+      todoApp.appendChild(bucket.element);
     </script>
   </body>
 </html>
