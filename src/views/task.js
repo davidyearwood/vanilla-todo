@@ -119,24 +119,11 @@ export function TaskCreateFormComponent(props) {
       'button',
       {
         class: 'task-form__button',
-        'data-action': 'update',
+        'data-action': 'create',
         'data-for': props.id,
         'data-type': 'form'
       },
       'Create'
-    )
-  );
-
-  fragment.appendChild(
-    createElement(
-      'button',
-      {
-        class: 'task-form__button',
-        'data-action': 'cancel',
-        'data-for': props.id,
-        'data-type': 'form'
-      },
-      'Cancel'
     )
   );
 

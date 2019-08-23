@@ -10,7 +10,7 @@ export default class Bucket {
       title: config.title,
       id: this.id
     });
-
+    this.element.appendChild(taskComponentCreator.createForm({ id: ID() }));
     this.tasks = new Map();
     this.element.addEventListener('click', this.handleClick.bind(this));
   }
@@ -87,6 +87,10 @@ export default class Bucket {
       } else if (dataAction === 'delete') {
         let removedTask = this.removeTask(id);
         this.element.removeChild(removedTask.element);
+      } else if (dataAction === 'create') {
+        let formValues = getFormValues(target.parentNode);
+        let newId = ID();
+        this.addTaskToDom(Object.assign(formValues, { id: newId }));
       }
     }
   }
