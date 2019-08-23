@@ -1,18 +1,7 @@
 import ID from './utils/ID.js';
 import { BucketComponent } from './views/bucket.js';
 import taskComponentCreator from './views/task.js';
-
-function getFormValues(form) {
-  let values = {};
-  Array.prototype.forEach.call(form.children, child => {
-    let value = child.value;
-    if (value) {
-      values[child.name] = value;
-    }
-  });
-
-  return values;
-}
+import getFormValues from './utils/getFormValues.js';
 
 export default class Bucket {
   constructor(config) {
@@ -31,6 +20,7 @@ export default class Bucket {
 
     this.element.appendChild(task.element);
   }
+
   addTask(props) {
     let { tasks } = this;
     let id = ID();
