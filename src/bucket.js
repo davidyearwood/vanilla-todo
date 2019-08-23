@@ -2,8 +2,10 @@ import ID from './utils/ID.js';
 import { BucketComponent } from './views/bucket.js';
 import taskComponentCreator from './views/task.js';
 import getFormValues from './utils/getFormValues.js';
+import clearFormValues from './utils/clearFormValues.js';
 import removeChildrenNodes from './utils/removeChildrenNodes.js';
 import spliceNode from './utils/spliceNode.js';
+import createElement from './utils/createElement.js';
 
 export default class Bucket {
   constructor(config) {
@@ -12,8 +14,14 @@ export default class Bucket {
       title: config.title,
       id: this.id
     });
+
     this._taskCreateForm = taskComponentCreator.createForm({ id: ID() });
+    this._taskContainer = createElement('section', { class: 'tasks-list'});
+
     this.element.appendChild(this._taskCreateForm);
+    this.element.appendChild(this._taskContainer);
+
+
     this.tasks = new Map();
     this.element.addEventListener('click', this.handleClick.bind(this));
   }
@@ -79,38 +87,36 @@ export default class Bucket {
         let updatedProps = Object.assign({}, getFormValues(target.parentNode), {
           id
         });
-        let newTask = this.updateTask(
+        this.updateTask(
           updatedProps,
           taskComponentCreator.content
         );
-        this.element.replaceChild(newTask.element, task.element);
+        this.renderTasks();
       } else if (dataAction === 'cancel') {
         let task = this.tasks.get(id);
-        let newTask = this.updateTask(task.props, taskComponentCreator.content);
-        this.element.replaceChild(newTask.element, task.element);
+        this.updateTask(task.props, taskComponentCreator.content);
+        this.renderTasks();
       } else if (dataAction === 'delete') {
-        let removedTask = this.removeTask(id);
-        this.element.removeChild(removedTask.element);
+        this.removeTask(id);
+        this.renderTasks();
       } else if (dataAction === 'create') {
-        let formValues = getFormValues(target.parentNode);
-        let newId = ID();
-        this.addTaskToDom(Object.assign(formValues, { id: newId }));
+        this.addTask(Object.assign(getFormValues(target.parentNode), { id: ID() } ));
+        clearFormValues(target.parentNode);
+        this.renderTasks();
       }
     }
   }
 
   renderTasks() {
-    let { tasks, element } = this;
+    let { tasks, element, _taskContainer } = this;
     let fragment = document.createDocumentFragment();
-
-    console.log(tasks);
+    
     for (let [key, value] of tasks) {
       fragment.appendChild(value.element);
     }
 
-    console.log(fragment.children);
 
-    removeChildrenNodes(element);
-    element.appendChild(fragment);
+    removeChildrenNodes(_taskContainer);
+    _taskContainer.appendChild(fragment);
   }
 }
