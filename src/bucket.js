@@ -8,21 +8,17 @@ export default class Bucket {
       title: config.title,
       id: this.id
     });
-
+    this.taskComponentCreator = config.taskComponentCreator; 
     this.tasks = new Map();
     this.element.get().addEventListener('click', this.handleClick.bind(this));
   }
 
-  addTask(task) {
-    let { tasks } = this;
-    if (tasks.has(task.id)) {
-      return this.tasks;
-    }
-
-    this.element.get().appendChild(task.get());
-
-    tasks.set(task.id, task);
-
+  addTask(props) {
+    let { taskComponentCreator, tasks } = this;
+    let updatedProps = Object.assign(props, { id: ID() });
+    let task = taskComponentCreator.content(updatedProps); 
+    this.element.get().appendChild(task);
+    tasks.set(updatedProps.id, task);
     return tasks;
   }
 
@@ -31,19 +27,20 @@ export default class Bucket {
     let isDeleted = tasks.delete(id);
 
     if (isDeleted) {
-      this.element.removeChild(task.get());
+      this.element.removeChild(task);
     }
 
     return isDeleted;
   }
 
   taskToForm(id) {
-    let task = this.tasks.get(id);
-    let taskUI = task.get();
-    let taskForm = task.getForm();
+    let { taskComponentCreator, tasks } = this; 
+    let task = tasks.get(id);
+    let taskForm = taskComponentCreator.editForm(props);
+
     let parent = this.element.get();
 
-    parent.replaceChild(taskForm, taskUI);
+    parent.replaceChild(taskForm, task);
   }
 
   handleClick(e) {
