@@ -16,7 +16,7 @@ export default class Bucket {
     });
 
     this._taskCreateForm = taskComponentCreator.createForm({ id: ID() });
-    this._taskContainer = createElement('section', { class: 'tasks-list'});
+    this._taskContainer = createElement('section', { class: 'tasks-list dropzone', 'data-for': this.id });
 
     this.element.appendChild(this._taskCreateForm);
     this.element.appendChild(this._taskContainer);
@@ -24,6 +24,17 @@ export default class Bucket {
 
     this.tasks = new Map();
     this.element.addEventListener('click', this.handleClick.bind(this));
+
+    this._taskContainer.addEventListener('dragstart', (e) => {
+      let data = JSON.stringify(this.getTask(e.target.dataset.id).props);
+      e.dataTransfer.setData("application/data", data);
+      e.dataTransfer.effectAllowed = "moved";
+      e.dataTransfer.dropEffect = "move";
+    });
+
+    this._taskContainer.addEventListener('dragenter', (e) => {
+
+    });
   }
 
   addTaskToDom(props) {
@@ -32,13 +43,18 @@ export default class Bucket {
     this.element.appendChild(task.element);
   }
 
+  getTask(id) {
+    return this.tasks.get(id);
+  }
+
   addTask(props) {
     let { tasks } = this;
-    let id = ID();
-    let task = taskComponentCreator.content(Object.assign(props, { id }));
+    let id = props.id ? props.id : ID();
+    let modifiedProps = Object.assign(props, { id, dataFor: this.id });
+    let task = taskComponentCreator.content(modifiedProps);
 
     tasks.set(id, {
-      props: Object.assign(props, { id }),
+      props: modifiedProps,
       element: task
     });
 

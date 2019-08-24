@@ -1,7 +1,7 @@
 import createElement from '../utils/createElement.js';
 
 export function TaskComponent(props) {
-  const { id, title, description } = props;
+  const { id, title, description, dataFor } = props;
 
   return createElement(
     'section',
@@ -10,6 +10,7 @@ export function TaskComponent(props) {
       id: `task-${id}`,
       'data-id': id,
       'data-type': 'task',
+      'data-for': dataFor ? dataFor : '',
       draggable: true
     },
     [

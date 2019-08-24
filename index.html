@@ -10,20 +10,34 @@
       .task > * {
         pointer-events: none;
       }
+
+      .dropzone {
+        min-height: 350px;
+        border: 2px dashed black
+      }
     </style>
   </head>
   <body>
-    <div id="todo"></div>
+    <div id="entry"></div>
     <script type="module">
       import Bucket from './src/bucket.js';
+      import ToDoApp from './src/ToDoApp.js';
 
-      let todoApp = document.getElementById('todo');
+      let entry = document.getElementById('entry');
 
-      let bucket = new Bucket({
-        title: 'Doing...'
-      });
+      // let bucket = new Bucket({
+      //   title: 'Doing...'
+      // });
 
-      todoApp.appendChild(bucket.element);
+      let todo = new ToDoApp();
+
+      todo.createBucket();
+      todo.createBucket();
+      todo.renderBuckets();
+
+      entry.appendChild(todo.container);
+
     </script>
+
   </body>
 </html>

@@ -5,35 +5,66 @@ import removeChildrenNodes from './utils/removeChildrenNodes.js';
 
 export default class ToDoApp {
   constructor() {
-    this.buckets = new Map();
+    this.buckets = [];
     this.container = createElement('div', { class: 'todo', id: 'todo' });
+
+    this.container.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+
+    this.container.addEventListener('drop', (e) => {
+      if (!e.target.classList.contains('dropzone')) {
+        return;
+      }
+
+      let { target } = e; 
+      let { buckets } = this; 
+      let data = JSON.parse(e.dataTransfer.getData("application/data"));
+      
+      let draggedElement = document.getElementById(`task-${data.id}`);
+      let oldBucketId = data.dataFor;
+      let newBucketId = target.dataset.for;
+
+      let oldBucket = buckets.find((bucket) => oldBucketId === bucket.id);
+
+      let task = oldBucket.getTask(data.id);
+      oldBucket.removeTask(data.id);
+
+      let newBucket = buckets.find((bucket) => newBucketId === bucket.id);
+
+      newBucket.addTask(Object.assign(data, { dataFor: newBucketId}));
+      draggedElement.dataset.for = newBucketId;
+
+      target.appendChild(draggedElement);
+    });
+
   }
 
   createBucket() {
     let { buckets } = this;
-    let id = ID();
-    let bucket = new Bucket({ id });
-    buckets.set(id, {
-      id,
-      bucket
-    });
+    let bucket = new Bucket({ title: ''});
 
-    return buckets.get(id);
+    buckets.push(bucket);
+
+    return bucket;
   }
 
   deleteBucket(id) {
-    let { buckets } = this;
-    let bucket = buckets.get(id);
-    return buckets.delete(id);
+    this.buckets = this.buckets.filter((bucket) => 
+      bucket.id !== id
+    );
+
+    return this.buckets;
   }
 
   renderBuckets() {
     let { buckets, container } = this;
     let fragment = document.createDocumentFragment();
 
-    for (let [key, value] of buckets) {
-      fragment.appendChild(value.bucket);
-    }
+    buckets.forEach((bucket) => {
+      fragment.appendChild(bucket.element);
+    });
+
     removeChildrenNodes(container);
     container.appendChild(fragment);
   }
