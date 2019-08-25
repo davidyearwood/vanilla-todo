@@ -49,12 +49,12 @@ export default class Bucket {
     e.dataTransfer.dropEffect = "move";
   }
 
-  setTitle(title) {
+  setTitle(props) {
     let newTitleElement = createElement('h1', {
       class: 'bucket__title',
       'data-action': 'get-bucket-title-form',
-      'data-id': this.title.dataset.id
-    }, title);
+      'data-id': props.id
+    }, props.title);
 
     this.element.replaceChild(newTitleElement, this.title);
     this.title = newTitleElement;
@@ -123,7 +123,6 @@ export default class Bucket {
         this.renderTasks();
         break;
       case 'cancel': 
-        console.log(target);
         task = this.tasks.get(target.getAttribute('data-id') || target.getAttribute('data-for'));
         this.updateTask(task.props, taskComponentCreator.content);
         this.renderTasks();
@@ -142,7 +141,7 @@ export default class Bucket {
       case 'get-bucket-title-form':
         let titleForm = BucketTitleFormComponent({
           id: this.title.dataset.id,
-          title: this.title.nodeValue
+          title: this.title.textContent
         });
         this.element.replaceChild(titleForm, this.title);
         this.title = titleForm; 
@@ -150,6 +149,13 @@ export default class Bucket {
       case 'get-task-form': 
         this.updateTask(this.tasks.get(target.dataset.id).props, taskComponentCreator.editForm);
         this.renderTasks();
+        break;
+      case 'update-bucket-title': 
+        let formId = target.dataset.for;
+        let input = document.getElementById(`bucket-form-title-${formId}`);
+        this.setTitle({ id: formId, title: input.value });
+        break;
+      case 'cancel-bucket-title': 
         break;
     }
   }
