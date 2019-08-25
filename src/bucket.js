@@ -24,11 +24,12 @@ export default class Bucket {
     
     this.taskContainer = createElement('section', { class: 'tasks-list dropzone', 'data-for': this.id });
     
+    this.element.appendChild(this.title);
     this.element.appendChild(this.taskCreatorForm);
     this.element.appendChild(this.taskContainer);
 
     this.element.addEventListener('click', this.handleClick.bind(this));
-    this.taskContainer.addEventListener('dragstart', this.handleDragStart.bind(this));
+    this.element.addEventListener('dragstart', this.handleDragStart.bind(this));
   }
 
   handleDragStart(e) {
@@ -36,6 +37,15 @@ export default class Bucket {
     e.dataTransfer.setData("application/data", data);
     e.dataTransfer.effectAllowed = "moved";
     e.dataTransfer.dropEffect = "move"; 
+  }
+
+  setTitle(title) {
+    let newTitleElement = createElement('h1', {
+      class: 'bucket__title'
+    }, title);
+
+    this.element.replaceChild(newTitleElement, this.title);
+    this.title = newTitleElement;
   }
 
   getTask(id) {

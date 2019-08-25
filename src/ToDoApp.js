@@ -23,9 +23,10 @@ export default class ToDoApp {
     e.preventDefault();
     let { target } = e;
     let dataAction = target.getAttribute('data-action');
+    let value = this.form.querySelector('.bucket-form__input').value;
 
     if (dataAction === 'create-bucket') {
-      this.createBucket();
+      this.createBucket(value);
       this.renderBuckets();
     }
 
