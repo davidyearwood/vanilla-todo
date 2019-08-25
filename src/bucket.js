@@ -155,8 +155,6 @@ export default class Bucket {
         let input = document.getElementById(`bucket-form-title-${formId}`);
         this.setTitle({ id: formId, title: input.value });
         break;
-      case 'cancel-bucket-title': 
-        break;
     }
   }
 

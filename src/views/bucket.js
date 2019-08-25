@@ -48,18 +48,7 @@ export function BucketTitleFormComponent(props) {
           type: 'button'
         },
         'Update Bucket Title'
-      ),
-      createElement(
-        'button', {
-          class: 'bucket-form__button',
-          'data-action': 'cancel-bucket-title',
-          'data-for': props.id,
-          'data-type': 'form',
-          type: 'button'
-        },
-        'cancel'
       )
-
     ]
   );
 }
