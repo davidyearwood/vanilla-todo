@@ -47,7 +47,7 @@ export function BucketTitleFormComponent(props) {
           'data-type': 'form',
           type: 'button'
         },
-        'Update Bucket Title'
+        'Save'
       )
     ]
   );
