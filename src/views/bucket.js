@@ -46,7 +46,8 @@ export function BucketFormComponent(props) {
           class: 'task-form__button',
           'data-action': 'create-bucket',
           'data-for': props.id,
-          'data-type': 'form'
+          'data-type': 'form',
+          type: 'button'
         },
         'Create Bucket'
       )

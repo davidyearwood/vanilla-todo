@@ -33,7 +33,10 @@
 
       todo.createBucket();
       todo.createBucket();
-      todo.renderBuckets();
+      
+      window.addEventListener('DOMContentLoaded', () => {
+        todo.renderBuckets();
+      });
 
       entry.appendChild(todo.container);
 
