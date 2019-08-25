@@ -11,6 +11,7 @@ export function TaskComponent(props) {
       'data-id': id,
       'data-type': 'task',
       'data-for': dataFor ? dataFor : '',
+      'data-action': 'get-task-form',
       draggable: true
     },
     [

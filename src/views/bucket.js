@@ -16,6 +16,54 @@ export function BucketComponent(props) {
   );
 }
 
+export function BucketTitleFormComponent(props) {
+  let {
+    id,
+    title
+  } = props;
+
+  return createElement(
+    'form', {
+      class: 'bucket-form',
+      'data-id': id,
+      'data-type': 'form',
+      id: `bucket-form-${id}`,
+    }, [
+      createElement('label', {
+        for: `bucket-form-title-${id}`
+      }, 'Title'),
+      createElement('input', {
+        type: 'text',
+        class: 'bucket-form__input',
+        id: `bucket-form-title-${id}`,
+        value: title,
+        name: 'title'
+      }),
+      createElement(
+        'button', {
+          class: 'bucket-form__button',
+          'data-action': 'update-bucket-title',
+          'data-for': props.id,
+          'data-type': 'form',
+          type: 'button'
+        },
+        'Update Bucket Title'
+      ),
+      createElement(
+        'button', {
+          class: 'bucket-form__button',
+          'data-action': 'cancel-bucket-title',
+          'data-for': props.id,
+          'data-type': 'form',
+          type: 'button'
+        },
+        'cancel'
+      )
+
+    ]
+  );
+}
+
 export function BucketFormComponent(props) {
   let {
     id,
@@ -41,15 +89,14 @@ export function BucketFormComponent(props) {
 
       createElement(
         'button', {
-          class: 'task-form__button',
+          class: 'bucket-form__button',
           'data-action': 'create-bucket',
           'data-for': props.id,
           'data-type': 'form',
           type: 'button'
         },
         'Create Bucket'
-      )
-
+      ),
     ]
   );
 }

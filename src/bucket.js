@@ -1,5 +1,7 @@
 import ID from './utils/ID.js';
-import { BucketComponent } from './views/bucket.js';
+import {
+  BucketComponent, BucketTitleFormComponent
+} from './views/bucket.js';
 import taskComponentCreator from './views/task.js';
 import getFormValues from './utils/getFormValues.js';
 import clearFormValues from './utils/clearFormValues.js';
@@ -17,13 +19,20 @@ export default class Bucket {
     });
 
     this.title = createElement('h1', {
-      class: 'bucket__title'
+      class: 'bucket__title',
+      'data-action': 'get-bucket-title-form',
+      'data-id': ID()
     }, config.title);
 
-    this.taskCreatorForm = taskComponentCreator.createForm({ id: ID() });
-    
-    this.taskContainer = createElement('section', { class: 'tasks-list dropzone', 'data-for': this.id });
-    
+    this.taskCreatorForm = taskComponentCreator.createForm({
+      id: ID()
+    });
+
+    this.taskContainer = createElement('section', {
+      class: 'tasks-list dropzone',
+      'data-for': this.id
+    });
+
     this.element.appendChild(this.title);
     this.element.appendChild(this.taskCreatorForm);
     this.element.appendChild(this.taskContainer);
@@ -34,14 +43,17 @@ export default class Bucket {
 
   handleDragStart(e) {
     let data = JSON.stringify(this.getTask(e.target.dataset.id).props);
+    console.log(data);
     e.dataTransfer.setData("application/data", data);
     e.dataTransfer.effectAllowed = "moved";
-    e.dataTransfer.dropEffect = "move"; 
+    e.dataTransfer.dropEffect = "move";
   }
 
   setTitle(title) {
     let newTitleElement = createElement('h1', {
-      class: 'bucket__title'
+      class: 'bucket__title',
+      'data-action': 'get-bucket-title-form',
+      'data-id': this.title.dataset.id
     }, title);
 
     this.element.replaceChild(newTitleElement, this.title);
@@ -53,9 +65,14 @@ export default class Bucket {
   }
 
   addTask(props) {
-    let { tasks } = this;
+    let {
+      tasks
+    } = this;
     let id = props.id ? props.id : ID();
-    let modifiedProps = Object.assign(props, { id, dataFor: this.id });
+    let modifiedProps = Object.assign(props, {
+      id,
+      dataFor: this.id
+    });
     let task = taskComponentCreator.content(modifiedProps);
 
     tasks.set(id, {
@@ -74,7 +91,10 @@ export default class Bucket {
   }
 
   updateTask(props, component) {
-    let { tasks, element } = this;
+    let {
+      tasks,
+      element
+    } = this;
     let task = tasks.get(props.id);
 
     if (!task) {
@@ -91,47 +111,73 @@ export default class Bucket {
     return tasks.get(props.id);
   }
 
-  handleClick(e) {
-    e.preventDefault();
-    let { tasks, updateTask, renderTasks } = this;
-    let { target } = e;
-    let dataType = target.getAttribute('data-type');
-    let id = target.getAttribute('data-id') || target.getAttribute('data-for');
-
-    if (dataType === 'task') {
-      this.updateTask(tasks.get(id).props, taskComponentCreator.editForm);
-      this.renderTasks();
-    } else if (dataType === 'form') {
-      let dataAction = target.getAttribute('data-action');
-      if (dataAction === 'update') {
-        let task = this.tasks.get(id);
-        let updatedProps = Object.assign({}, getFormValues(target.parentNode), {
-          id
-        });
+  handleActions(target, action) {
+    let task;
+    switch (action) {
+      case 'update':
+        task = this.tasks.get(target.getAttribute('data-id') || target.getAttribute('data-for'));
         this.updateTask(
-          updatedProps,
+          Object.assign(task.props, getFormValues(target.parentNode)),
           taskComponentCreator.content
         );
         this.renderTasks();
-      } else if (dataAction === 'cancel') {
-        let task = this.tasks.get(id);
+        break;
+      case 'cancel': 
+        console.log(target);
+        task = this.tasks.get(target.getAttribute('data-id') || target.getAttribute('data-for'));
         this.updateTask(task.props, taskComponentCreator.content);
         this.renderTasks();
-      } else if (dataAction === 'delete') {
-        this.removeTask(id);
+        break;
+      case 'delete': 
+        this.removeTask(target.getAttribute('data-id') || target.getAttribute('data-for'));
         this.renderTasks();
-      } else if (dataAction === 'create') {
-        this.addTask(Object.assign(getFormValues(target.parentNode), { id: ID() } ));
+        break;
+      case 'create': 
+        this.addTask(Object.assign(getFormValues(target.parentNode), {
+          id: ID()
+        }));
         clearFormValues(target.parentNode);
         this.renderTasks();
-      }
+        break;
+      case 'get-bucket-title-form':
+        let titleForm = BucketTitleFormComponent({
+          id: this.title.dataset.id,
+          title: this.title.nodeValue
+        });
+        this.element.replaceChild(titleForm, this.title);
+        this.title = titleForm; 
+        break;
+      case 'get-task-form': 
+        this.updateTask(this.tasks.get(target.dataset.id).props, taskComponentCreator.editForm);
+        this.renderTasks();
+        break;
     }
   }
 
+  handleClick(e) {
+    e.preventDefault();
+    let {
+      tasks,
+      updateTask,
+      renderTasks
+    } = this;
+    let {
+      target
+    } = e;
+    let action = target.getAttribute('data-action');
+    let id = target.getAttribute('data-id') || target.getAttribute('data-for');
+
+    this.handleActions(target, action);
+  }
+
   renderTasks() {
-    let { tasks, element, taskContainer } = this;
+    let {
+      tasks,
+      element,
+      taskContainer
+    } = this;
     let fragment = document.createDocumentFragment();
-    
+
     for (let [key, value] of tasks) {
       fragment.appendChild(value.element);
     }
