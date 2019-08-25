@@ -10,7 +10,7 @@ export default class ToDoApp {
     this.container = createElement('div', { class: 'todo', id: 'todo' });
     
     this.form = BucketFormComponent({ id: ID() });
-
+    
     this.container.addEventListener('dragover', (e) => {
       this.handleDragOver(e);
     });
