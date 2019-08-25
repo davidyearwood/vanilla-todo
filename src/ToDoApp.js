@@ -11,17 +11,12 @@ export default class ToDoApp {
     
     this.form = BucketFormComponent({ id: ID() });
     
-    this.container.addEventListener('dragover', (e) => {
-      this.handleDragOver(e);
-    });
+    this.container.addEventListener('dragover', this.handleDragOver.bind(this));
 
-    this.container.addEventListener('drop', (e) => {
-      this.handleDrop(e);
-    });
+    this.container.addEventListener('drop', this.handleDrop.bind(this));
 
-    this.container.addEventListener('click', (e) => {
-      this.handleClick(e);
-    });
+    this.container.addEventListener('click', this.handleClick.bind(this));
+
   }
 
   handleClick(e) {
@@ -66,9 +61,9 @@ export default class ToDoApp {
     target.appendChild(draggedElement);
   }
   
-  createBucket() {
+  createBucket(title) {
     let { buckets } = this;
-    let bucket = new Bucket({ title: ''});
+    let bucket = new Bucket({ title: title || ''});
 
     buckets.push(bucket);
 

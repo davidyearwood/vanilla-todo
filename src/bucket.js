@@ -9,38 +9,33 @@ import createElement from './utils/createElement.js';
 
 export default class Bucket {
   constructor(config) {
+    this.tasks = new Map();
     this.id = ID();
+
     this.element = BucketComponent({
-      title: config.title,
       id: this.id
     });
 
-    this._taskCreateForm = taskComponentCreator.createForm({ id: ID() });
-    this._taskContainer = createElement('section', { class: 'tasks-list dropzone', 'data-for': this.id });
+    this.title = createElement('h1', {
+      class: 'bucket__title'
+    }, config.title);
 
-    this.element.appendChild(this._taskCreateForm);
-    this.element.appendChild(this._taskContainer);
+    this.taskCreatorForm = taskComponentCreator.createForm({ id: ID() });
+    
+    this.taskContainer = createElement('section', { class: 'tasks-list dropzone', 'data-for': this.id });
+    
+    this.element.appendChild(this.taskCreatorForm);
+    this.element.appendChild(this.taskContainer);
 
-
-    this.tasks = new Map();
     this.element.addEventListener('click', this.handleClick.bind(this));
-
-    this._taskContainer.addEventListener('dragstart', (e) => {
-      let data = JSON.stringify(this.getTask(e.target.dataset.id).props);
-      e.dataTransfer.setData("application/data", data);
-      e.dataTransfer.effectAllowed = "moved";
-      e.dataTransfer.dropEffect = "move";
-    });
-
-    this._taskContainer.addEventListener('dragenter', (e) => {
-
-    });
+    this.taskContainer.addEventListener('dragstart', this.handleDragStart.bind(this));
   }
 
-  addTaskToDom(props) {
-    let task = this.addTask(props);
-
-    this.element.appendChild(task.element);
+  handleDragStart(e) {
+    let data = JSON.stringify(this.getTask(e.target.dataset.id).props);
+    e.dataTransfer.setData("application/data", data);
+    e.dataTransfer.effectAllowed = "moved";
+    e.dataTransfer.dropEffect = "move"; 
   }
 
   getTask(id) {
@@ -124,7 +119,7 @@ export default class Bucket {
   }
 
   renderTasks() {
-    let { tasks, element, _taskContainer } = this;
+    let { tasks, element, taskContainer } = this;
     let fragment = document.createDocumentFragment();
     
     for (let [key, value] of tasks) {
@@ -132,7 +127,7 @@ export default class Bucket {
     }
 
 
-    removeChildrenNodes(_taskContainer);
-    _taskContainer.appendChild(fragment);
+    removeChildrenNodes(taskContainer);
+    taskContainer.appendChild(fragment);
   }
 }
