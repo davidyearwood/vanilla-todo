@@ -1,4 +1,5 @@
 import taskCreator from './task.js';
+import task from './task.js';
 
 export default class TaskView {
   constructor(model) {
@@ -7,17 +8,15 @@ export default class TaskView {
     this.model.register(this);
   }
 
-  updateTask(id) {
-    let task = document.getElementById(`task-${id}`);
+  updateTask(payload) {
+    let task = document.getElementById(`task-${payload.id}`);
     let parent = task.parentElement; 
-    let taskData = this.model.get(id);
+    let taskData = this.model.get(payload.id);
     let element; 
     switch (taskData.type) {
       case 'task-element':
         element = taskCreator.TaskComponent(taskData.props);
     }
-
-    parent.replaceChild(element, task);
   }
   
   createTask(payload) {
@@ -28,8 +27,11 @@ export default class TaskView {
       description: task.description,
       dataFor: task.dataFor
     });
+  }
 
-    console.log(taskElement);
+  deleteTask(payload) {
+    let taskElement = document.getElementById(`task-${payload.id}`);
+    taskElement.parentNode.removeChild(task);
   }
 
   update(msg) {
@@ -39,9 +41,11 @@ export default class TaskView {
         console.log(msg);
         break;
       case 'update-task':
+        this.updateTask(msg.payload);
         console.log(msg);
         break;
       case 'delete-task':
+        this.deleteTask(msg.payload);
         console.log(msg);
         break;
     }
