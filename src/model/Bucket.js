@@ -1,6 +1,21 @@
 import Model from './Model.js';
 import ID from '../utils/ID.js';
 
+/*
+ * Bucket -> Task
+ * Bucket {
+ *  String Title,
+ *  String Id 
+ * }  
+ * Bucket has many tasks
+ * Task belongs to a bucket 
+ * 
+ * Bucket {
+ *  String Title
+ *  String Id
+ *  Task tasks = {}
+ * } 
+ */
 export default class BucketModel extends Model {
   constructor() {
     super();
@@ -20,6 +35,7 @@ export default class BucketModel extends Model {
     let id = ID();
     this.buckets.set(id, {
       title: bucket.title,
+      tasks: bucket.tasks || [],
       id
     });
 

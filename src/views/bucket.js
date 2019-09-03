@@ -1,12 +1,9 @@
 import createElement from '../utils/createElement.js';
 
 export function BucketComponent(props) {
-  const {
-    id,
-    title
-  } = props;
+  const { id, title, titleId, formId } = props;
 
-  return createElement(
+  let container = createElement(
     'section', {
       class: 'bucket',
       id: `bucket-${id}`,
@@ -14,6 +11,23 @@ export function BucketComponent(props) {
       'data-type': 'bucket'
     }
   );
+
+  let h1 = createElement('h1', {
+    class: 'bucket__title',
+    'data-action': 'get-bucket-title-form',
+    'data-id': ID()
+  }, title);
+
+  let form = taskCreator.createForm({
+    id: ID()
+  });
+
+  let dropzone = createElement('section', {
+    class: 'tasks-list dropzone',
+    'data-for': id
+  });
+  
+
 }
 
 export function BucketTitleFormComponent(props) {
@@ -89,3 +103,9 @@ export function BucketFormComponent(props) {
     ]
   );
 }
+
+export default {
+  content: BucketComponent, 
+  titleForm: BucketTitleFormComponent,
+  form: BucketFormComponent
+};

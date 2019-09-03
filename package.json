@@ -1,0 +1,17 @@
+{
+  "name": "vanilla-todo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dayvod/vanilla-todo.git",
+  "author": "Davidood <dwhywood@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0"
+  }
+}
