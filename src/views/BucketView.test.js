@@ -6,18 +6,17 @@ import {
   wait,
   getNodeText,
   queryByText
-} from '@testing-library/dom'
+} from '@testing-library/dom';
 // adds special assertions like toHaveTextContent
-import '@testing-library/jest-dom/extend-expect'
+import '@testing-library/jest-dom/extend-expect';
 
 import BucketView from './BucketView.js';
 import BucketModel from '../model/Bucket.js';
 import TaskModel from '../model/Task.js';
 import createElement from '../utils/createElement.js';
 
-let bm = null;
-let bv = null;
-let tm = null;
+let bucketModel = null;
+let bucketView = null;
 let containerDOM = null;
 
 function getContainerDOM() {
@@ -27,33 +26,22 @@ function getContainerDOM() {
   });
 }
 
-function getModelView(container) {
-  let tm = new TaskModel();
-  let bm = new BucketModel({
-    children: tm
-  });
-  let bv = new BucketView({
-    model: bm,
-    container
+function getBucketModel(model) {
+  let bucketModel = new BucketModel({
+    children: model
   });
 
-  return {
-    tm,
-    bm,
-    bv
-  }
+  return bucketModel;
 }
 
 beforeEach(() => {
   containerDOM = getContainerDOM();
-  const modelView = getModelView(containerDOM);
-  bm = modelView.bm;
-  bv = modelView.bv;
-  tm= modelView.tm;
+  bucketModel = getBucketModel(new TaskModel());
+  bucketView = new BucketView({ model: bucketModel, container: containerDOM });
 });
 
-test('Should add BucketComponent to the parent node', () => {
-  let bucketId = bm.create({
+it('Should add BucketComponent to the parent node', () => {
+  let bucketId = bucketModel.create({
     title: 'Todo'
   });
 
@@ -62,20 +50,12 @@ test('Should add BucketComponent to the parent node', () => {
   expect(bucketNode).toBeTruthy();
 });
 
-test('Should remove a BucketComponent from the parent node', () => {
-  let todoId = bm.create({
-    title: 'Todo'
-  });
-
-  let doingId = bm.create({
-    title: 'Doing'
-  });
-
-  let doneId = bm.create({
+it('Should remove a BucketComponent from the parent node', () => {
+  let id = bucketModel.create({
     title: 'Done'
   });
-  
-  bm.delete(doneId);
+
+  bucketModel.delete(id);
 
   expect(queryByText(containerDOM, 'Done')).toBeFalsy();
 });

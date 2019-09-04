@@ -1,0 +1,32 @@
+/* Bucket */
+.bucket__title {
+  font-size: 1.563rem;
+}
+/* Bucket Form */
+.bucket-form__button {
+  background: #007a5a;
+  color: #fff;
+  padding: 0.41em;
+  border: 0;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 5px;
+}
+
+.bucket-form__input {
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  display: block;
+  padding: 0.328em;
+  margin-bottom: 0.512rem;
+}
+
+.bucket-form label {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  font-size: 1.563rem;
+  display: block;
+  margin-bottom: 0.512rem;
+}
