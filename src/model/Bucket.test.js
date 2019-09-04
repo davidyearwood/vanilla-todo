@@ -7,7 +7,7 @@ let id1 = null;
 
 beforeEach(() => {
   tm = new TaskModel();
-  bm = new BucketModel({model: tm});
+  bm = new BucketModel({children: tm});
 
   id1 = bm.create({
     title: 'Todo',

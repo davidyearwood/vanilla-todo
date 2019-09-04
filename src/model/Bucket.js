@@ -19,18 +19,21 @@ import ID from '../utils/ID.js';
 export default class BucketModel extends Model {
   constructor(config) {
     super();
-    this.model = config.model;
+    this.children = config.children;
     this.buckets = new Map();
   }
 
   delete(id) {
-    this.buckets.delete(id);
-    this.notify({
-      action: 'delete-bucket',
-      payload: {
-        id
-      }
-    });
+    let isDeleted = this.buckets.delete(id);
+
+    if (isDeleted) {
+      this.notify({
+        action: 'delete-bucket',
+        payload: {
+          id
+        }
+      });
+    }
   }
 
   get(id) {
@@ -38,12 +41,14 @@ export default class BucketModel extends Model {
   }
 
   create(bucket) {
-    let { model } = this;
+    let {
+      children
+    } = this;
     let id = ID();
     let newBucket = {
       id,
       title: bucket.title,
-      tasks: model.getAllByBelongsTo.bind(model, id),
+      tasks: children.getAllByBelongsTo.bind(children, id),
       id
     };
 
@@ -52,7 +57,8 @@ export default class BucketModel extends Model {
     this.notify({
       action: 'create-bucket',
       payload: {
-        id
+        id,
+        title: bucket.title
       }
     });
 

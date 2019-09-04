@@ -1,11 +1,13 @@
+import taskCreator from './task.js';
 import createElement from '../utils/createElement.js';
+import ID from '../utils/ID.js';
 
 export function BucketComponent(props) {
-  const { id, title, titleId, formId } = props;
+  const { id, title } = props;
 
   let container = createElement(
     'section', {
-      class: 'bucket',
+      class: `bucket bucket-${id}`,
       id: `bucket-${id}`,
       'data-id': id,
       'data-type': 'bucket'
@@ -28,6 +30,11 @@ export function BucketComponent(props) {
   });
   
 
+  container.appendChild(h1);
+  container.appendChild(form);
+  container.appendChild(dropzone);
+
+  return container;
 }
 
 export function BucketTitleFormComponent(props) {
