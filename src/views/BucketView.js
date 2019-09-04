@@ -24,7 +24,7 @@ export default class BucketView {
   }
 
   deleteBucketComponent(payload) {
-    let bucketId = `.bucket-${payload.id}`;
+    let bucketId = `#bucket-${payload.id}`;
     let bucket = this.container.querySelector(bucketId);
     this.container.removeChild(bucket);
   }
