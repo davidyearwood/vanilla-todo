@@ -25,15 +25,17 @@ function getContainerDOM() {
   });
 }
 
+beforeEach(() => {
+  containerDOM = getContainerDOM();
+  document.documentElement.innerHTML = containerDOM.outerHTML;
+  taskModel = new TaskModel();
+  taskView = new TaskView({
+    model: taskModel
+  });
+});
+
 describe('The Task View instance', () => {
   describe('when a task is created', () => {
-    beforeEach(() => {
-      containerDOM = getContainerDOM();
-      document.documentElement.innerHTML = containerDOM.outerHTML;
-      taskModel = new TaskModel();
-      taskView = new TaskView({ model: taskModel });
-    });
-
     it('should append that task to the element it belongs to', () => {
       let todoContainer = getByTestId(
         document.documentElement,
@@ -51,7 +53,31 @@ describe('The Task View instance', () => {
       let taskUI = getByText(document.documentElement, 'Todo');
 
       expect(taskUI).toBeInstanceOf(HTMLElement);
-      expect(taskUI).toBeTruthy();
+    });
+  });
+
+  describe('when a task is updated', () => {
+    it('should update the specified task ui', () => {
+      let todoContainer = getByTestId(
+        document.documentElement,
+        'todo-container'
+      );
+
+      expect(todoContainer).toBeEmpty();
+
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      let taskUI = getByText(document.documentElement, 'Todo');
+
+      taskModel.update(taskId, {
+        title: 'doing'
+      });
+
+      expect(taskUI.textContent).toBe('doing');
     });
   });
 });
