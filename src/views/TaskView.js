@@ -8,7 +8,7 @@ const TOGGLE_TASK = 'toggle-task';
 
 export default class TaskView {
   constructor({ model }) {
-    this.creator = taskCreator;
+    this.creator = taskCreator; // creates elements
     this.model = model;
     this.model.register(this);
   }
@@ -26,7 +26,6 @@ export default class TaskView {
 
   createTask(payload) {
     let task = this.model.get(payload.id);
-
     let taskElement = this.creator.content({
       id: task.id,
       title: task.title,
@@ -56,7 +55,7 @@ export default class TaskView {
       return false;
     }
 
-    let { dataType, id } = taskElement.dataset;
+    let { dataType } = taskElement.dataset;
     let { id, title, description, dataFor } = payload;
 
     if (dataType === 'form') {
@@ -82,7 +81,6 @@ export default class TaskView {
     switch (msg.action) {
       case CREATE_TASK:
         this.createTask(msg.payload);
-        console.log(msg);
         break;
       case UPDATE_TASK:
         this.updateTask(msg.payload);
