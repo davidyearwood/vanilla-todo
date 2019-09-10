@@ -23,8 +23,10 @@ export default class TaskView {
       dataFor: taskData.belongsTo
     });
     let parentNode = taskElement.parentNode;
+    let newParent = document.getElementById(taskData.belongsTo);
 
-    parentNode.replaceChild(newTaskElement, taskElement);
+    parentNode.removeChild(taskElement);
+    newParent.appendChild(newTaskElement);
   }
 
   createTask(payload) {
@@ -51,30 +53,32 @@ export default class TaskView {
   }
 
   toggleTask(payload) {
-    let taskElement = document.querySelector(`#task-${payload.id}`);
-    let { parentNode } = taskElement;
+    let taskElement = document.getElementById(`task-${payload.id}`);
+    let parentNode = taskElement.parentNode;
+    let taskData = this.model.get(payload.id);
     let newElement = null;
 
     if (!taskElement) {
       return false;
     }
 
-    let { dataType } = taskElement.dataset;
-    let { id, title, description, dataFor } = payload;
+    let { title, description, belongsTo } = taskData;
+    let { type } = taskElement.dataset;
+    let { id } = payload;
 
-    if (dataType === 'form') {
+    if (type === 'form') {
       newElement = this.creator.content({
         id,
         title,
         description,
-        dataFor
+        dataFor: belongsTo
       });
     } else {
       newElement = this.creator.editForm({
         id,
         title,
         description,
-        dataFor
+        dataFor: belongsTo
       });
     }
 

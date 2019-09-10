@@ -12,7 +12,8 @@ export function TaskComponent(props) {
       'data-type': 'task',
       'data-for': dataFor ? dataFor : '',
       'data-action': 'get-task-form',
-      draggable: true
+      draggable: true,
+      'data-testid': 'task-element'
     },
     [
       createElement('h1', { class: 'task__title', 'data-for': id }, title),
@@ -26,7 +27,7 @@ export function TaskComponent(props) {
 }
 
 export function TaskFormComponent(props) {
-  let { id, title, description } = props;
+  let { id, title, description, dataFor } = props;
 
   return createElement(
     'form',
@@ -34,8 +35,10 @@ export function TaskFormComponent(props) {
       class: 'task-form',
       'data-id': id,
       'data-type': 'form',
-      id: `task-form-${id}`,
-      draggable: true
+      id: `task-${id}`,
+      draggable: true,
+      'data-testid': 'form',
+      'data-for': dataFor
     },
     [
       createElement('label', { for: `task-form-title-${id}` }, 'Title'),
@@ -44,7 +47,8 @@ export function TaskFormComponent(props) {
         class: 'task-form__input',
         id: `task-form-title-${id}`,
         value: title || '',
-        name: 'title'
+        name: 'title',
+        'data-testid': 'title-input'
       }),
       createElement(
         'label',
@@ -58,7 +62,8 @@ export function TaskFormComponent(props) {
         class: 'task-form__input',
         id: `task-form-description-${id}`,
         value: description || '',
-        name: `description`
+        name: `description`,
+        'data-testid': 'description-input'
       })
     ]
   );

@@ -97,4 +97,89 @@ describe('The Task View instance', () => {
       expect(queryByText(document.documentElement, 'Todo')).toBeFalsy();
     });
   });
+
+  describe('when a task is toggled', () => {
+    it('should toggle to a form, if it was an element', () => {
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      taskView.update({
+        action: 'toggle-task',
+        payload: {
+          id: taskId
+        }
+      });
+      let form = getByTestId(document.documentElement, 'form');
+      expect(form.dataset.id).toBe(taskId);
+    });
+    it('should not effect the data-for attribute', () => {
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      taskView.update({
+        action: 'toggle-task',
+        payload: {
+          id: taskId
+        }
+      });
+      let form = getByTestId(document.documentElement, 'form');
+      expect(form.dataset.for).toBe('23132');
+    });
+    it('should have its description and title as values', () => {
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      taskView.update({
+        action: 'toggle-task',
+        payload: {
+          id: taskId
+        }
+      });
+
+      expect(getByTestId(document.documentElement, 'title-input').value).toBe(
+        'Todo'
+      );
+      expect(
+        getByTestId(document.documentElement, 'description-input').value
+      ).toBe('This is a test element');
+    });
+    it('should toggle to an element, if it was a form', () => {
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      taskView.update({
+        action: 'toggle-task',
+        payload: {
+          id: taskId
+        }
+      });
+
+      taskView.update({
+        action: 'toggle-task',
+        payload: {
+          id: taskId
+        }
+      });
+
+      let taskElement = getByTestId(document.documentElement, 'task-element');
+      let h1 = getByText(document.documentElement, 'Todo');
+      let p = getByText(document.documentElement, 'This is a test element');
+
+      expect(h1.textContent).toBe('Todo');
+      expect(p.textContent).toBe('This is a test element');
+      expect(taskElement.dataset.for).toBe('23132');
+    });
+  });
 });
