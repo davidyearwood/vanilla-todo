@@ -77,7 +77,24 @@ describe('The Task View instance', () => {
         title: 'doing'
       });
 
-      expect(taskUI.textContent).toBe('doing');
+      expect(queryByText(document.documentElement, 'Todo')).toBeFalsy();
+      expect(getByText(document.documentElement, 'doing').textContent).toBe(
+        'doing'
+      );
+    });
+  });
+
+  describe('when a task is deleted', () => {
+    it('should remove the task from the dom', () => {
+      let taskId = taskModel.create({
+        title: 'Todo',
+        description: 'This is a test element',
+        belongsTo: '23132'
+      });
+
+      taskModel.delete(taskId);
+
+      expect(queryByText(document.documentElement, 'Todo')).toBeFalsy();
     });
   });
 });

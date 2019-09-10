@@ -14,14 +14,17 @@ export default class TaskView {
   }
 
   updateTask(payload) {
-    let task = document.getElementById(`task-${payload.id}`);
-    let parent = task.parentElement;
+    let taskElement = document.getElementById(`task-${payload.id}`);
     let taskData = this.model.get(payload.id);
-    let element;
-    switch (taskData.type) {
-      case 'task-element':
-        element = taskCreator.TaskComponent(taskData.props);
-    }
+    let newTaskElement = this.creator.content({
+      id: taskData.id,
+      title: taskData.title,
+      description: taskData.description,
+      dataFor: taskData.belongsTo
+    });
+    let parentNode = taskElement.parentNode;
+
+    parentNode.replaceChild(newTaskElement, taskElement);
   }
 
   createTask(payload) {
@@ -39,10 +42,11 @@ export default class TaskView {
   }
 
   deleteTask(payload) {
-    let taskElement = document.querySelector(`#task-${payload.id}`);
-    let { parentNode } = taskElement;
+    let taskElement = document.getElementById(`task-${payload.id}`);
+    let parentNode = taskElement.parentNode;
+
     if (taskElement) {
-      parentNode.removeChild(task);
+      parentNode.removeChild(taskElement);
     }
   }
 
@@ -84,11 +88,9 @@ export default class TaskView {
         break;
       case UPDATE_TASK:
         this.updateTask(msg.payload);
-        console.log(msg);
         break;
       case DELETE_TASK:
         this.deleteTask(msg.payload);
-        console.log(msg);
         break;
       case TOGGLE_TASK:
         this.toggleTask(msg.payload);

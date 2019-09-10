@@ -63,7 +63,8 @@ export default class TaskModel extends Model {
     this.notify({
       action: actions.UPDATE_TASK,
       payload: {
-        id
+        id,
+        belongsTo: belongsTo || task.belongsTo
       }
     });
   }
