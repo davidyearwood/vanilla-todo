@@ -18,36 +18,14 @@
     </style>
   </head>
   <body>
-    <div id="entry"></div>
+    <div id="entry">
+      <h2>Stuff</h2>
+      <p>Yeah more stuff</p>
+    </div>
     <script type="module">
-      import TaskModel from './src/model/Task.js';
-      import TaskView from './src/views/TaskView.js';
-      import BucketView from './src/views/BucketView.js';
-      import BucketModel from './src/model/Bucket.js';
+      import TodoController from './src/controller/Todo.js';
 
-      let entry = document.getElementById('entry');
-      let model = new TaskModel();
-      let view = new TaskView(model); 
-      let bucketModel = new BucketModel();
-      let bucketView = new BucketView({ model: bucketModel });
-
-      let task = model.create({
-        title: 'This is a test',
-        description: 'This is a desecription',
-      });
-
-      let task2 = model.create({
-        title: 'This is a second test',
-        description: 'woot woot',
-      })
-
-      let bucket = bucketModel.create({
-        title: 'This is a bucket',
-        tasks: [task, task2]
-      });
-
-      console.log(bucketModel);
-      console.log(model.tasks);
+      let tc = new TodoController({ container: document.getElementById('entry')});
     </script>
 
   </body>

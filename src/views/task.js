@@ -11,7 +11,7 @@ export function TaskComponent(props) {
       'data-id': id,
       'data-type': 'task',
       'data-for': dataFor ? dataFor : '',
-      'data-action': 'get-task-form',
+      'data-action': 'toggle-task',
       draggable: true,
       'data-testid': 'task-element'
     },
@@ -36,16 +36,15 @@ export function TaskFormComponent(props) {
       'data-id': id,
       'data-type': 'form',
       id: `task-${id}`,
-      draggable: true,
       'data-testid': 'form',
       'data-for': dataFor
     },
     [
-      createElement('label', { for: `task-form-title-${id}` }, 'Title'),
+      createElement('label', { for: `task-title-${id}` }, 'Title'),
       createElement('input', {
         type: 'text',
         class: 'task-form__input',
-        id: `task-form-title-${id}`,
+        id: `task-title-${id}`,
         value: title || '',
         name: 'title',
         'data-testid': 'title-input'
@@ -53,14 +52,14 @@ export function TaskFormComponent(props) {
       createElement(
         'label',
         {
-          for: `task-form-descrpition-${id}`
+          for: `task-descrpition-${id}`
         },
         'Description'
       ),
       createElement('input', {
         type: 'text',
         class: 'task-form__input',
-        id: `task-form-description-${id}`,
+        id: `task-description-${id}`,
         value: description || '',
         name: `description`,
         'data-testid': 'description-input'
@@ -78,7 +77,7 @@ export function TaskEditFormComponent(props) {
       'button',
       {
         class: 'task-form__button',
-        'data-action': 'update',
+        'data-action': 'update-task',
         'data-for': props.id,
         'data-type': 'form'
       },
@@ -91,7 +90,7 @@ export function TaskEditFormComponent(props) {
       'button',
       {
         class: 'task-form__button',
-        'data-action': 'cancel',
+        'data-action': 'toggle-task',
         'data-for': props.id,
         'data-type': 'form'
       },
@@ -104,7 +103,7 @@ export function TaskEditFormComponent(props) {
       'button',
       {
         class: 'task-form__button',
-        'data-action': 'delete',
+        'data-action': 'delete-task',
         'data-for': props.id,
         'data-type': 'form'
       },
