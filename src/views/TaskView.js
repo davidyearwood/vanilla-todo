@@ -6,6 +6,10 @@ const UPDATE_TASK = 'update-task';
 const DELETE_TASK = 'delete-task';
 const TOGGLE_TASK = 'toggle-task';
 
+// we need a class where you want task to
+// be inside of, it doesn't have to be a bucket
+const TASK_CONTAINER = '.dropzone';
+
 export default class TaskView {
   constructor({ model }) {
     this.creator = taskCreator; // creates elements
@@ -22,23 +26,28 @@ export default class TaskView {
       description: taskData.description,
       dataFor: taskData.belongsTo
     });
-    let parentNode = taskElement.parentNode;
+    let oldDropzone = taskElement.parentNode;
     let newParent = document.getElementById(taskData.belongsTo);
 
-    parentNode.removeChild(taskElement);
-    newParent.appendChild(newTaskElement);
+    let newDropzone = newParent.querySelector(DROPZONE_CLASS);
+
+    oldDropzone.removeChild(taskElement);
+    newDropzone.appendChild(newTaskElement);
   }
 
   createTask(payload) {
     let task = this.model.get(payload.id);
+
     let taskElement = this.creator.content({
       id: task.id,
       title: task.title,
       description: task.description,
-      dataFor: task.dataFor
+      dataFor: task.belongsTo
     });
 
-    let parentNode = document.getElementById(payload.belongsTo);
+    // the model it belongs to
+    let bucket = document.getElementById(payload.belongsTo);
+    let parentNode = bucket.querySelector(TASK_CONTAINER);
 
     parentNode.appendChild(taskElement);
   }

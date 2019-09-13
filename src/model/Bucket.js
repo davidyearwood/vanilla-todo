@@ -41,15 +41,12 @@ export default class BucketModel extends Model {
   }
 
   create(bucket) {
-    let {
-      children
-    } = this;
+    let { children } = this;
     let id = ID();
     let newBucket = {
       id,
       title: bucket.title,
-      tasks: children.getAllByBelongsTo.bind(children, id),
-      id
+      tasks: children.getAllByBelongsTo.bind(children, id)
     };
 
     this.buckets.set(id, newBucket);

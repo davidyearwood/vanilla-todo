@@ -125,7 +125,7 @@ export function TaskCreateFormComponent(props) {
       'button',
       {
         class: 'task-form__button',
-        'data-action': 'create',
+        'data-action': 'create-task',
         'data-for': props.id,
         'data-type': 'form'
       },

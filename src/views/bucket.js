@@ -5,30 +5,32 @@ import ID from '../utils/ID.js';
 export function BucketComponent(props) {
   const { id, title } = props;
 
-  let container = createElement(
-    'section', {
-      class: `bucket bucket-${id}`,
-      id: `bucket-${id}`,
-      'data-id': id,
-      'data-type': 'bucket'
-    }
+  let container = createElement('section', {
+    class: `bucket bucket-${id}`,
+    id: id,
+    'data-id': id,
+    'data-type': 'bucket'
+  });
+
+  let h1 = createElement(
+    'h1',
+    {
+      class: 'bucket__title',
+      'data-action': 'get-bucket-title-form',
+      'data-id': ID()
+    },
+    title
   );
 
-  let h1 = createElement('h1', {
-    class: 'bucket__title',
-    'data-action': 'get-bucket-title-form',
-    'data-id': ID()
-  }, title);
-
   let form = taskCreator.createForm({
-    id: ID()
+    id: ID(),
+    dataFor: id
   });
 
   let dropzone = createElement('section', {
     class: 'tasks-list dropzone',
     'data-for': id
   });
-  
 
   container.appendChild(h1);
   container.appendChild(form);
@@ -38,21 +40,24 @@ export function BucketComponent(props) {
 }
 
 export function BucketTitleFormComponent(props) {
-  let {
-    id,
-    title
-  } = props;
+  let { id, title } = props;
 
   return createElement(
-    'form', {
+    'form',
+    {
       class: 'bucket-form',
       'data-id': id,
       'data-type': 'form',
-      id: `bucket-form-${id}`,
-    }, [
-      createElement('label', {
-        for: `bucket-form-title-${id}`
-      }, 'Title'),
+      id: `bucket-form-${id}`
+    },
+    [
+      createElement(
+        'label',
+        {
+          for: `bucket-form-title-${id}`
+        },
+        'Title'
+      ),
       createElement('input', {
         type: 'text',
         class: 'bucket-form__input',
@@ -61,7 +66,8 @@ export function BucketTitleFormComponent(props) {
         name: 'title'
       }),
       createElement(
-        'button', {
+        'button',
+        {
           class: 'bucket-form__button',
           'data-action': 'update-bucket-title',
           'data-for': props.id,
@@ -75,20 +81,24 @@ export function BucketTitleFormComponent(props) {
 }
 
 export function BucketFormComponent(props) {
-  let {
-    id,
-  } = props;
+  let { id } = props;
 
   return createElement(
-    'form', {
+    'form',
+    {
       class: 'bucket-form',
       'data-id': id,
       'data-type': 'form',
-      id: `bucket-form-${id}`,
-    }, [
-      createElement('label', {
-        for: `bucket-form-title-${id}`
-      }, 'Title'),
+      id: `bucket-form-${id}`
+    },
+    [
+      createElement(
+        'label',
+        {
+          for: `bucket-form-title-${id}`
+        },
+        'Title'
+      ),
       createElement('input', {
         type: 'text',
         class: 'bucket-form__input',
@@ -98,7 +108,8 @@ export function BucketFormComponent(props) {
       }),
 
       createElement(
-        'button', {
+        'button',
+        {
           class: 'bucket-form__button',
           'data-action': 'create-bucket',
           'data-for': props.id,
@@ -106,13 +117,13 @@ export function BucketFormComponent(props) {
           type: 'button'
         },
         'Create Bucket'
-      ),
+      )
     ]
   );
 }
 
 export default {
-  content: BucketComponent, 
+  content: BucketComponent,
   titleForm: BucketTitleFormComponent,
   form: BucketFormComponent
 };

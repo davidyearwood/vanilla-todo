@@ -18,11 +18,15 @@ let taskModel = null;
 let taskView = null;
 
 function getContainerDOM() {
-  return createElement('div', {
-    class: 'todo',
-    id: '23132',
-    'data-testid': 'todo-container'
-  });
+  return createElement(
+    'div',
+    {
+      class: 'todo',
+      id: '23132',
+      'data-testid': 'todo-container'
+    },
+    [createElement('div', { class: 'dropzone' })]
+  );
 }
 
 beforeEach(() => {
@@ -36,23 +40,23 @@ beforeEach(() => {
 
 describe('The Task View instance', () => {
   describe('when a task is created', () => {
-    it('should append that task to the element it belongs to', () => {
-      let todoContainer = getByTestId(
-        document.documentElement,
-        'todo-container'
-      );
-
-      expect(todoContainer).toBeEmpty();
+    it('should append task to the element it belongs to', () => {
+      const title = 'Todo';
+      const description = 'This is a test element';
 
       let taskId = taskModel.create({
-        title: 'Todo',
-        description: 'This is a test element',
+        title,
+        description,
         belongsTo: '23132'
       });
 
-      let taskUI = getByText(document.documentElement, 'Todo');
+      let h1 = getByText(document.documentElement, title);
+      let p = getByText(document.documentElement, description);
 
-      expect(taskUI).toBeInstanceOf(HTMLElement);
+      expect(p.textContent).toBe(description);
+      expect(h1.textContent).toBe(title);
+      expect(p).toBeInstanceOf(HTMLElement);
+      expect(h1).toBeInstanceOf(HTMLElement);
     });
   });
 
