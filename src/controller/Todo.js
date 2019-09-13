@@ -2,6 +2,7 @@ import TaskView from '../views/TaskView.js';
 import BucketView from '../views/BucketView.js';
 import TaskModel from '../model/Task.js';
 import BucketModel from '../model/Bucket.js';
+import { throttle, debounce } from '../utils/throttle-debounce.js';
 
 // Actions
 const CREATE_TASK = 'create-task';
@@ -10,6 +11,9 @@ const DELETE_TASK = 'delete-task';
 const TOGGLE_TASK = 'toggle-task';
 const DELETE_BUCKET = 'delete-bucket';
 const CREATE_BUCKET = 'create-bucket';
+
+const DROPZONE_CLASS = 'dropzone';
+const MIME_TYPE_JSON = 'application/json';
 
 export default class TodoController {
   constructor(options) {
@@ -29,6 +33,15 @@ export default class TodoController {
     });
 
     this.container.addEventListener('click', this.handleClick.bind(this));
+    this.container.addEventListener(
+      'dragstart',
+      this.handleDragStart.bind(this)
+    );
+    this.container.addEventListener(
+      'dragover',
+      throttle(100, this.handleDragover.bind(this))
+    );
+    this.container.addEventListener('drop', this.handleDrop.bind(this));
 
     this.bucketModel.create({
       title: 'Todo'
@@ -37,6 +50,45 @@ export default class TodoController {
     this.bucketModel.create({
       title: 'Doing'
     });
+  }
+
+  handleDragStart(event) {
+    let { target } = event;
+    if (!target.draggable) {
+      return null;
+    }
+    // defines the data that is being dragged
+    event.dataTransfer.setData(
+      MIME_TYPE_JSON,
+      JSON.stringify({
+        belongsTo: target.dataset.for,
+        id: target.dataset.id
+      })
+    );
+
+    event.dataTransfer.dropEffect = 'move';
+  }
+
+  handleDragover(event) {
+    event.preventDefault();
+    let { target } = event;
+    console.log(target);
+    if (!target.classList.contains(DROPZONE_CLASS)) {
+      return null;
+    }
+    event.dataTransfer.dropEffect = 'move';
+  }
+
+  handleDrop(event) {
+    event.preventDefault();
+    let { target } = event;
+    console.log(target);
+    if (!target.classList.contains(DROPZONE_CLASS)) {
+      return null;
+      console.log('Not a dropped area');
+    }
+    let data = JSON.parse(event.dataTransfer.getData(MIME_TYPE_JSON));
+    console.log(data);
   }
 
   handleClick(event) {

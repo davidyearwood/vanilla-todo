@@ -15,5 +15,8 @@
     "@testing-library/jest-dom": "^4.1.0",
     "babel-jest": "^24.9.0",
     "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "throttle-debounce": "^2.1.0"
   }
 }
