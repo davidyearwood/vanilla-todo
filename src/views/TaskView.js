@@ -26,13 +26,12 @@ export default class TaskView {
       description: taskData.description,
       dataFor: taskData.belongsTo
     });
-    let oldDropzone = taskElement.parentNode;
-    let newParent = document.getElementById(taskData.belongsTo);
+    let bucket = document.getElementById(taskData.belongsTo);
+    let oldParent = taskElement.parentNode;
+    let newParent = bucket.querySelector(TASK_CONTAINER);
 
-    let newDropzone = newParent.querySelector(DROPZONE_CLASS);
-
-    oldDropzone.removeChild(taskElement);
-    newDropzone.appendChild(newTaskElement);
+    oldParent.removeChild(taskElement);
+    newParent.appendChild(newTaskElement);
   }
 
   createTask(payload) {

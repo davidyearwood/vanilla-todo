@@ -62,13 +62,6 @@ describe('The Task View instance', () => {
 
   describe('when a task is updated', () => {
     it('should update the specified task ui', () => {
-      let todoContainer = getByTestId(
-        document.documentElement,
-        'todo-container'
-      );
-
-      expect(todoContainer).toBeEmpty();
-
       let taskId = taskModel.create({
         title: 'Todo',
         description: 'This is a test element',
