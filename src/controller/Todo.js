@@ -33,15 +33,11 @@ export default class TodoController {
     });
 
     this.container.addEventListener('click', this.handleClick.bind(this));
+
     this.container.addEventListener(
       'dragstart',
       this.handleDragStart.bind(this)
     );
-    this.container.addEventListener(
-      'dragover',
-      throttle(100, this.handleDragover.bind(this))
-    );
-    this.container.addEventListener('drop', this.handleDrop.bind(this));
 
     this.bucketModel.create({
       title: 'Todo'
@@ -50,14 +46,25 @@ export default class TodoController {
     this.bucketModel.create({
       title: 'Doing'
     });
+
+    let dropzones = this.container.querySelectorAll(`.${DROPZONE_CLASS}`);
+    dropzones.forEach(dropzone => {
+      dropzone.addEventListener(
+        'dragover',
+        this.handleDragover.bind(this)
+      );
+  
+      dropzone.addEventListener('drop', this.handleDrop.bind(this));
+    });
   }
 
   handleDragStart(event) {
     let { target } = event;
+    console.log('DRAG START');
     if (!target.draggable) {
       return null;
     }
-    // defines the data that is being dragged
+    
     event.dataTransfer.setData(
       MIME_TYPE_JSON,
       JSON.stringify({
@@ -65,29 +72,26 @@ export default class TodoController {
         id: target.dataset.id
       })
     );
-
     event.dataTransfer.dropEffect = 'move';
   }
 
   handleDragover(event) {
     event.preventDefault();
-    let { target } = event;
-    console.log(target);
-    if (!target.classList.contains(DROPZONE_CLASS)) {
-      return null;
-    }
     event.dataTransfer.dropEffect = 'move';
   }
 
   handleDrop(event) {
-    event.preventDefault();
     let { target } = event;
-    console.log(target);
     if (!target.classList.contains(DROPZONE_CLASS)) {
-      return null;
       console.log('Not a dropped area');
+      return null;
     }
+
+    let newBelongsTo = target.dataset.for;
     let data = JSON.parse(event.dataTransfer.getData(MIME_TYPE_JSON));
+
+    this.taskModel.update(data.id, { belongsTo: newBelongsTo});
+
     console.log(data);
   }
 
