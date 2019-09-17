@@ -32,6 +32,8 @@ export default class TodoController {
       container: this.container
     });
 
+    this.container.appendChild(this.bucketView.createForm());
+
     this.container.addEventListener('click', this.handleClick.bind(this));
 
     this.container.addEventListener(
@@ -39,32 +41,27 @@ export default class TodoController {
       this.handleDragStart.bind(this)
     );
 
-    this.bucketModel.create({
-      title: 'Todo'
-    });
-
-    this.bucketModel.create({
-      title: 'Doing'
-    });
-
-    let dropzones = this.container.querySelectorAll(`.${DROPZONE_CLASS}`);
-    dropzones.forEach(dropzone => {
-      dropzone.addEventListener(
-        'dragover',
-        this.handleDragover.bind(this)
-      );
-  
-      dropzone.addEventListener('drop', this.handleDrop.bind(this));
-    });
+    this.container.addEventListener('submit', this.handleSubmit.bind(this));
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    let { target } = event;
+    let { children } = target;
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].nodeName === 'BUTTON') {
+        children[i].click();
+        break;
+      }
+    }
+  }
   handleDragStart(event) {
     let { target } = event;
     console.log('DRAG START');
     if (!target.draggable) {
       return null;
     }
-    
+
     event.dataTransfer.setData(
       MIME_TYPE_JSON,
       JSON.stringify({
@@ -90,7 +87,9 @@ export default class TodoController {
     let newBelongsTo = target.dataset.for;
     let data = JSON.parse(event.dataTransfer.getData(MIME_TYPE_JSON));
 
-    this.taskModel.update(data.id, { belongsTo: newBelongsTo});
+    this.taskModel.update(data.id, {
+      belongsTo: newBelongsTo
+    });
 
     console.log(data);
   }
@@ -101,6 +100,7 @@ export default class TodoController {
     let { action } = target.dataset;
     let id = target.dataset.id || target.dataset.for;
     let data = null;
+    let form = null;
     switch (action) {
       case UPDATE_TASK:
         data = {
@@ -121,7 +121,7 @@ export default class TodoController {
         this.taskModel.delete(id);
         break;
       case CREATE_TASK:
-        let form = target.parentNode;
+        form = target.parentNode;
         let bucket = document.getElementById(form.dataset.for);
         data = {
           title: document.getElementById(`task-title-${id}`).value,
@@ -130,6 +130,21 @@ export default class TodoController {
         };
         this.taskModel.create(data);
         break;
+      case CREATE_BUCKET:
+        form = target.parentNode;
+        let inputField = form.querySelector('.bucket-form__input');
+        this.handleCreatingBucket(inputField.value);
+        break;
     }
+  }
+
+  handleCreatingBucket(title) {
+    let id = this.bucketModel.create({
+      title
+    });
+    let bucket = document.getElementById(id);
+    let dropzone = bucket.querySelector('.dropzone');
+    dropzone.addEventListener('dragover', this.handleDragover.bind(this));
+    dropzone.addEventListener('drop', this.handleDrop.bind(this));
   }
 }

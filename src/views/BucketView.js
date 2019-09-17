@@ -14,6 +14,9 @@ export default class BucketView {
     this.model.register(this);
   }
 
+  createForm() {
+    return this.creator.form();
+  }
   createBucketComponent(payload) {
     let bucketComponent = this.creator.content({
       title: payload.title,

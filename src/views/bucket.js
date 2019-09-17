@@ -80,8 +80,8 @@ export function BucketTitleFormComponent(props) {
   );
 }
 
-export function BucketFormComponent(props) {
-  let { id } = props;
+export function BucketFormComponent() {
+  let id = ID();
 
   return createElement(
     'form',
@@ -112,7 +112,7 @@ export function BucketFormComponent(props) {
         {
           class: 'bucket-form__button',
           'data-action': 'create-bucket',
-          'data-for': props.id,
+          'data-for': id,
           'data-type': 'form',
           type: 'button'
         },
